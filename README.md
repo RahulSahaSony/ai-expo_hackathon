@@ -6,7 +6,7 @@ SupplyGuard is a multimodal AI system leveraging OpenAI’s APIs to empower poli
 Welcome to the Supply Chain Risk Dashboard, a powerful tool to visualize and analyze supply chain risks associated with various commodities.
 
  ## 📌 How to Use the Dashboard:
-This is the link: PLEASE USE- http://172.20.10.7:8501/
+This is the link: PLEASE USE- https://scsphackathon-supplychain.streamlit.app/
 
 
 **Select Commodity:** Choose from a comprehensive list of commodities in the dropdown.
