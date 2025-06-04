@@ -38,11 +38,22 @@ How risky is importing Pharmaceutical preparations in 2023?
 
 What are the main risks for Passenger cars imports in 2021?
 
-Technical Requirements:
+# Technical Stack
+Backend: Python (FastAPI/Flask)
 
-A stable internet connection.
+Frontend: Streamlit / React (customizable)
 
-A microphone (optional, for voice queries).
+AI Models: OpenAI GPT-4o, Whisper (optional for voice), Vision (optional for images)
+
+Data Sources:
+
+USITC, UN Comtrade (trade data)
+
+News APIs, social media
+
+World Bank Political Stability Index, EIU
+
+Deployment: Docker-ready, deployable to any cloud
 
 Contact:
 
