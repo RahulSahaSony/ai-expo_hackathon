@@ -1,31 +1,32 @@
-This is the link: PLEASE USE- http://10.75.253.215:8501/
-Supply Chain Risk Dashboard
+# AI Beyond Defense: Tackling Concentration Risk
+OpenAI Track – AI+ Expo Hackathon 2025
 
+## Overview
+SupplyGuard is a multimodal AI system leveraging OpenAI’s APIs to empower policymakers with real-time insights and non-military strategies to mitigate these risks.
 Welcome to the Supply Chain Risk Dashboard, a powerful tool to visualize and analyze supply chain risks associated with various commodities.
 
-How to Use the Dashboard:
+## How to Use the Dashboard:
+This is the link: PLEASE USE- http://10.75.253.215:8501/
 
-Risk Dashboard:
+## Select Commodity: Choose from a comprehensive list of commodities in the dropdown.
 
-Select Commodity: Choose from a comprehensive list of commodities in the dropdown.
+## Select Year: Pick a year between 2015 and 2023.
 
-Select Year: Pick a year between 2015 and 2023.
-
-Top Risky Countries: Adjust the slider to select the number of top risky countries to display.
+## Top Risky Countries: Adjust the slider to select the number of top risky countries to display.
 
 Click "Get Risk Data" to view an interactive visualization of the risk data.
 
-Chatbot:
+## Chatbot:
 
 Interact using one of the following methods:
 
-Text Query: Type your supply chain question and click "Ask."
+## Text Query: Type your supply chain question and click "Ask."
 
-Upload PDF: Upload a PDF document to automatically extract and analyze the commodity and year mentioned.
+## Upload PDF: Upload a PDF document to automatically extract and analyze the commodity and year mentioned.
 
-Voice Query: Record your query using the microphone to have it automatically transcribed and answered.
+## Voice Query: Record your query using the microphone to have it automatically transcribed and answered.
 
-Example Prompts to Use with Chatbot:
+## Example Prompts to Use with Chatbot:
 
 What's the risk associated with Semiconductors in 2022?
 
