@@ -100,18 +100,28 @@ with tab2:
 
     option = st.radio("Choose input method:", ["Ask a Question", "Upload a PDF", "Voice Query"])
 
+
     def handle_risk_fetch(commodity, year, title_prefix="", only_political=True):
         res = requests.get(
             f"{API_URL}/risk-score/",
-            params={"commodity": commodity, "year": year, "only_political": only_political}
+            params={
+                "commodity": commodity,
+                "year": year,
+                "only_political": only_political,
+            },
         )
         if res.status_code == 200:
             risk_data = pd.DataFrame(res.json()["all_countries"])
             st.dataframe(risk_data)
-            fig = px.bar(risk_data.head(10), x="Country", y="RiskPercentage",
-                         title=f"{title_prefix}{commodity} ({year})",
-                         labels={"RiskPercentage": "Political Risk (%)"},
-                         color="RiskPercentage", color_continuous_scale="OrRd")
+            fig = px.bar(
+                risk_data.head(10),
+                x="Country",
+                y="RiskPercentage",
+                title=f"{title_prefix}{commodity} ({year})",
+                labels={"RiskPercentage": "Political Risk (%)"},
+                color="RiskPercentage",
+                color_continuous_scale="OrRd",
+            )
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.error("Risk data not found for extracted parameters.")
@@ -129,12 +139,16 @@ with tab2:
                         response = client.chat.completions.create(
                             model="gpt-4",
                             messages=[
-                                {"role": "system", "content": (
-                                    "You are a helpful assistant for supply chain risk analysis. "
-                                    "If the user asks about commodities or years, try to extract a JSON with keys 'commodity' and 'year'. "
-                                    "Otherwise, answer their question normally.")},
-                                {"role": "user", "content": user_query}
-                            ]
+                                {
+                                    "role": "system",
+                                    "content": (
+                                        "You are a helpful assistant for supply chain risk analysis. "
+                                        "If the user asks about commodities or years, try to extract a JSON with keys 'commodity' and 'year'. "
+                                        "Otherwise, answer their question normally."
+                                    ),
+                                },
+                                {"role": "user", "content": user_query},
+                            ],
                         )
 
                         answer = response.choices[0].message.content
@@ -144,16 +158,34 @@ with tab2:
                         # Try parsing JSON if present
                         try:
                             result = json.loads(answer)
-                            if "commodity" in result and "year" in result:
-                                st.info(f"Detected Commodity: {result['commodity']} | Year: {result['year']}")
-                                handle_risk_fetch(result['commodity'], int(result['year']),
-                                                  title_prefix="Top Risk Countries by Political Risk: ")
+                            # Normalize commodity casing
+                            matched_commodity = next(
+                                (
+                                    c
+                                    for c in commodity_list
+                                    if c.lower() == result["commodity"].lower()
+                                ),
+                                None,
+                            )
+
+                            if matched_commodity:
+                                st.info(
+                                    f"Matched Commodity: {matched_commodity} | Year: {result['year']}"
+                                )
+                                handle_risk_fetch(
+                                    matched_commodity,
+                                    int(result["year"]),
+                                    title_prefix="Top Risk Countries by Political Risk: ",
+                                )
+                            else:
+                                st.warning(
+                                    f"Commodity '{result['commodity']}' not recognized."
+                                )
                         except json.JSONDecodeError:
                             pass
 
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
-
 
     elif option == "Upload a PDF":
         uploaded_file = st.file_uploader("Upload PDF", type=["pdf"])
@@ -168,30 +200,37 @@ with tab2:
                 with st.spinner("Analyzing..."):
                     try:
                         prompt = f"""
-You are a supply chain expert. A user has uploaded a document. Extract the commodity type and year mentioned in the document. 
-Return only a JSON with keys 'commodity' and 'year'.
-Text: {full_text[:3000]}
-                        """
+    You are a supply chain expert. A user has uploaded a document. Extract the commodity type and year mentioned in the document. 
+    Return only a JSON with keys 'commodity' and 'year'.
+    Text: {full_text[:3000]}
+                            """
                         chat_response = client.chat.completions.create(
                             model="gpt-4",
                             messages=[
-                                {"role": "system", "content": "You extract commodity and year from documents."},
-                                {"role": "user", "content": prompt}
-                            ]
+                                {
+                                    "role": "system",
+                                    "content": "You extract commodity and year from documents.",
+                                },
+                                {"role": "user", "content": prompt},
+                            ],
                         )
                         content = chat_response.choices[0].message.content
                         st.markdown("**ChatGPT Response:**")
                         st.code(content, language="json")
 
                         result = json.loads(content)
-                        handle_risk_fetch(result["commodity"], int(result["year"]), title_prefix="Risk Report: ")
+                        handle_risk_fetch(
+                            result["commodity"],
+                            int(result["year"]),
+                            title_prefix="Risk Report: ",
+                        )
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
 
     elif option == "Voice Query":
         st.subheader("🎤 Speak Your Query")
 
-        wav_audio_data = st_audiorec()
+        wav_audio_data = audiorecorder()
 
         if wav_audio_data is not None:
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
@@ -211,9 +250,12 @@ Text: {full_text[:3000]}
                         response = client.chat.completions.create(
                             model="gpt-4",
                             messages=[
-                                {"role": "system", "content": "You answer supply chain risk questions. Extract commodity and year if available and return JSON."},
-                                {"role": "user", "content": transcript}
-                            ]
+                                {
+                                    "role": "system",
+                                    "content": "You answer supply chain risk questions. Extract commodity and year if available and return JSON.",
+                                },
+                                {"role": "user", "content": transcript},
+                            ],
                         )
                         content = response.choices[0].message.content
                         st.markdown("### 🤖 Response")
@@ -221,7 +263,11 @@ Text: {full_text[:3000]}
 
                         try:
                             result = json.loads(content)
-                            handle_risk_fetch(result["commodity"], int(result["year"]), title_prefix="Voice Risk Report: ")
+                            handle_risk_fetch(
+                                result["commodity"],
+                                int(result["year"]),
+                                title_prefix="Voice Risk Report: ",
+                            )
                         except json.JSONDecodeError:
                             pass
 
