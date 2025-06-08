@@ -5,7 +5,7 @@ OpenAI Track – AI+ Expo Hackathon 2025
 SupplyGuard is a multimodal AI system leveraging OpenAI’s APIs to empower policymakers with real-time insights and non-military strategies to mitigate these risks.
 Welcome to the Supply Chain Risk Dashboard, a powerful tool to visualize and analyze supply chain risks associated with various commodities.
 
- ## 📌 How to Use the Dashboard:
+ ##  How to Use the Dashboard:
 This is the link: PLEASE USE- https://scsphackathon-supplychain.streamlit.app/
 
 
